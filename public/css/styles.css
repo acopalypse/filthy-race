@@ -1,0 +1,9 @@
+.bg-wrapper {
+  max-width: 700px;
+  margin: 15px auto;
+}
+.wrapper {
+  box-shadow: 0 0 5px #d6d6d6;
+  border-radius: 15px;
+  padding: 5px 25px;
+}
