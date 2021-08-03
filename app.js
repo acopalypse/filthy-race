@@ -4,6 +4,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
+// const faker = require('faker');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -11,30 +12,66 @@ const io = new socketIO.Server(httpServer);
 
 const PORT = process.env.PORT || 3000;
 
+const gameRoute = require('./routes/game.route');
+
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.render('index');
 });
+app.use('/game', gameRoute);
 
 const rooms = io.of('/').adapter.rooms;
-let rc = 1; // 2 max & 1 min
+let rc = 0;
 let rn = 'default';
-
+const colors = ['red', 'orange', 'yellow', 'pop'];
+const positions = [
+  [5, 5],
+  [5, 6],
+  [6, 5],
+  [6, 6],
+];
+const Hero = require('./core/hero.model');
+const Game = require('./core/game.model');
+const users = [];
 io.on('connection', (socket) => {
-  rn = rc === 1 ? socket.id : rn;
-  console.log(`New connection [${socket.id}](${io.engine.clientsCount})`);
+  rn = rc === 0 ? socket.id : rn;
+  console.log(`New connection: [${socket.id}](${io.engine.clientsCount})`);
   socket.leave(socket.id);
   socket.join(rn);
   const usersList = rooms.get(rn);
-  io.to(rn).emit('get:users', {
+  // console.log(`${socket.id}:${colors[rc]}`);
+  socket.emit('get:room', {
     users: [...usersList],
     room: rn,
     count: rc,
+    color: colors[rc],
+  });
+  const heroData = {
+    uid: socket.id,
+    room: rn,
+    position: positions[rc],
+    color: colors[rc],
+  };
+  const hero = new Hero(heroData);
+  // users.push(hero);
+  const game = new Game(hero);
+  socket.on('hero:move', (key) => {
+    const position = hero.heroMove(key.key);
+    game.tableCheck(hero);
+    socket.emit('hero:move', { position });
+  });
+  io.to(rn).emit('get:user', {
+    user: socket.id,
   });
   io.emit('get:usersCount', { all: io.engine.clientsCount });
-  rc === 2 ? (rc = 1) : (rc += 1);
+  if (rc === 3) {
+    users.splice(0, users.length);
+    rc = 0;
+  } else {
+    rc += 1;
+  }
 });
 
 httpServer.listen(PORT, () => {

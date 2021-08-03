@@ -1,9 +1,77 @@
 .bg-wrapper {
-  max-width: 700px;
+  max-width: 800px;
   margin: 15px auto;
 }
 .wrapper {
   box-shadow: 0 0 5px #d6d6d6;
   border-radius: 15px;
   padding: 5px 25px;
+}
+#title {
+  margin-bottom: 0;
+  text-align: center;
+}
+.game-wrapper {
+  display: flex;
+}
+#game {
+  width: 480px;
+  height: 480px;
+  margin: 25px auto;
+  border-radius: 10px;
+}
+#game .place {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  box-shadow: 0 0 0px 1px #173a1852;
+  border-radius: 5px;
+  margin: 0px;
+  background-color: #92c192;
+}
+#chat {
+  width: 280px;
+  margin: 25px auto;
+}
+#chatArea {
+  width: 100%;
+  background: whitesmoke;
+  height: 84%;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  padding: 15px 0px;
+}
+#chatArea p {
+  font-size: 14px;
+  color: gray;
+  font-size: 12px;
+  color: gray;
+  background-color: #eaeaea;
+  border-radius: 15px;
+  margin: 0px 15px 10px;
+  padding: 5px 10px;
+}
+#inputArea input {
+  width: 220px;
+  height: 34px;
+  border: none;
+  background-color: whitesmoke;
+  box-shadow: 0 0 2px #b7b7b7;
+  border-radius: 15px 5px 5px 15px;
+  padding: 0 15px;
+}
+#inputArea button {
+  border: none;
+  background-color: whitesmoke;
+  box-shadow: 0 0 2px #b7b7b7;
+  border-radius: 5px 15px 15px 5px;
+  height: 34px;
+  width: 56px;
+  cursor: pointer;
+}
+#inputArea button:hover {
+  background-color: #72bb72;
+}
+#inputArea input:focus-visible {
+  outline: none;
 }
