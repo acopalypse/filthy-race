@@ -4,7 +4,6 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
-// const faker = require('faker');
 
 const app = express();
 const httpServer = http.createServer(app);
