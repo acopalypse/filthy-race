@@ -3,6 +3,7 @@ class Game {
     this.users = users;
     this.table = new Array(12).fill(null);
     this.table = this.table.map(() => new Array(12).fill(null));
+    this.end = false;
   }
   tableCheck(data) {
     const { heroNum, key } = data;
@@ -23,6 +24,9 @@ class Game {
       const num = user.num;
       this.table[X][Y] = num;
     });
+  }
+  endGame() {
+    return (this.end = true);
   }
 }
 

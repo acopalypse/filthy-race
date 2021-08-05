@@ -5,6 +5,7 @@ class Hero {
     this.position = user.position;
     this.room = user.room;
     this.color = user.color;
+    this.cName = user.cName;
   }
 
   heroMove(key, table) {

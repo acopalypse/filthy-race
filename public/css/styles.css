@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+body {
+  font-family: 'Roboto', sans-serif;
+}
 .bg-wrapper {
   max-width: 800px;
   margin: 15px auto;
@@ -19,6 +23,22 @@
   height: 480px;
   margin: 25px auto;
   border-radius: 10px;
+  position: relative;
+}
+#game .end {
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: #f5f5f5e6;
+  width: 100%;
+  height: 100%;
+}
+#game .end p {
+  text-align: center;
+  width: 200px;
+  height: 150px;
+  font-size: 30px;
+  margin: 150px auto;
 }
 #game .place {
   position: relative;
@@ -41,7 +61,8 @@
 #chatArea {
   width: 100%;
   background: whitesmoke;
-  height: 84%;
+  height: 400px;
+  overflow: scroll;
   border-radius: 15px;
   margin-bottom: 15px;
   padding: 15px 0px;
@@ -79,4 +100,19 @@
 }
 #inputArea input:focus-visible {
   outline: none;
+}
+.intro h2 {
+  text-align: center;
+}
+.intro a {
+  color: white;
+  text-decoration: none;
+  background-color: #2a6f2a;
+  text-align: center;
+  width: 200px;
+  font-size: 24px;
+  display: block;
+  margin: 25px auto 15px;
+  padding: 10px;
+  border-radius: 10px;
 }

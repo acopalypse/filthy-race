@@ -84,11 +84,32 @@ io.on('connection', (socket) => {
       heroNum: socket.hn,
       key: key.key,
     };
-
-    const position = games[socket.gn].tableCheck(data);
-    const users = games[socket.gn].users.map((user) => user.position);
-    const table = games[socket.gn].table;
-    io.to(rn).emit('hero:move', { position, colors, table, users, cNames });
+    const score = [0, 0, 0, 0];
+    let empty = 0;
+    games[socket.gn].table.forEach((row, i) => {
+      row.forEach((col, j) => {
+        if (games[socket.gn].table[i][j] !== null) {
+          score[games[socket.gn].table[i][j]] += 1;
+        } else {
+          empty += 1;
+        }
+      });
+    });
+    const status = score.some((el) => el > 39);
+    if (status || empty === 0) {
+      const arrayMaxIndex = function (array) {
+        return array.indexOf(Math.max.apply(null, array));
+      };
+      console.log(arrayMaxIndex(score));
+      const winner = games[socket.gn].users[arrayMaxIndex(score)].cName;
+      console.log(winner);
+      io.to(rn).emit('game:end', { status: true, winner });
+    } else {
+      const position = games[socket.gn].tableCheck(data);
+      const users = games[socket.gn].users.map((user) => user.position);
+      const table = games[socket.gn].table;
+      io.to(rn).emit('hero:move', { position, colors, table, users, cNames });
+    }
   });
 
   io.to(rn).emit('game:table', {
@@ -103,6 +124,10 @@ io.on('connection', (socket) => {
   } else {
     rc += 1;
   }
+  socket.on('mail:message', (message) => {
+    message.text = `${cNames[socket.hn]}: ${message.text}`;
+    io.to(rn).emit('mail:message', message);
+  });
 });
 
 httpServer.listen(PORT, () => {

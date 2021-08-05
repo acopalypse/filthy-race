@@ -5,6 +5,23 @@ const chatArea = document.getElementById('chatArea');
 const title = document.getElementById('title');
 const color = document.getElementById('color');
 const game = document.getElementById('game');
+const inputArea = document.getElementById('inputArea');
+
+inputArea.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = e.target.text.value.trim();
+  if (text !== '') {
+    socket.emit('mail:message', { text });
+    inputArea.reset();
+  }
+});
+
+socket.on('mail:message', (message) => {
+  const p = document.createElement('p');
+  p.innerText = message.text;
+  chatArea.append(p);
+  chatArea.scrollTop = chatArea.scrollHeight;
+});
 
 Array(12)
   .fill('')
@@ -40,22 +57,24 @@ socket.on('get:user', (data) => {
   chatArea.append(p);
 });
 
+const keyLis = (e) => {
+  if (
+    e.key === 'ArrowLeft' ||
+    e.key === 'ArrowRight' ||
+    e.key === 'ArrowDown' ||
+    e.key === 'ArrowUp'
+  ) {
+    socket.emit('hero:move', { key: e.key });
+  }
+};
+
 socket.on('get:game', (data) => {
   const { game } = data;
   const p = document.createElement('p');
   p.innerText = game;
   chatArea.append(p);
 
-  window.addEventListener('keydown', (e) => {
-    if (
-      e.key === 'ArrowLeft' ||
-      e.key === 'ArrowRight' ||
-      e.key === 'ArrowDown' ||
-      e.key === 'ArrowUp'
-    ) {
-      socket.emit('hero:move', { key: e.key });
-    }
-  });
+  window.addEventListener('keydown', keyLis);
 });
 
 socket.on('game:table', (data) => {
@@ -97,4 +116,24 @@ socket.on('hero:move', (data) => {
     const el = document.querySelector(`[data-coord='${X}:${Y}']`);
     el.innerHTML = `<img src="/images/image_${i}.png">`;
   });
+});
+
+socket.on('game:end', (data) => {
+  const { status, winner } = data;
+  if (status) {
+    const div = document.createElement('div');
+    const p = document.createElement('p');
+    p.innerHTML = `
+    End!
+    <br>
+    Winner: ${winner}
+    <br>
+    <br>
+    <a href='/game'>Restart</a>
+    `;
+    div.className = 'end';
+    div.append(p);
+    game.append(div);
+    window.removeEventListener('keydown', keyLis, false);
+  }
 });
