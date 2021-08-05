@@ -6,6 +6,7 @@ const title = document.getElementById('title');
 const color = document.getElementById('color');
 const game = document.getElementById('game');
 const inputArea = document.getElementById('inputArea');
+const pong = new Audio('/sounds/pong.mp3');
 
 inputArea.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -122,6 +123,8 @@ socket.on('hero:move', (data) => {
     const el = document.querySelector(`[data-coord='${X}:${Y}']`);
     el.innerHTML = `<img src="/images/image_${i}.png">`;
   });
+  const pong = new Audio('/sounds/pong.mp3');
+  pong.play();
 });
 
 socket.on('game:end', (data) => {
