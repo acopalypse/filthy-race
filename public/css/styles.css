@@ -21,13 +21,18 @@
   border-radius: 10px;
 }
 #game .place {
+  position: relative;
   width: 40px;
   height: 40px;
   display: inline-block;
   box-shadow: 0 0 0px 1px #173a1852;
   border-radius: 5px;
   margin: 0px;
-  background-color: #92c192;
+  background-color: #e8e8e8;
+}
+#game .place img {
+  width: 40px;
+  height: 40px;
 }
 #chat {
   width: 280px;

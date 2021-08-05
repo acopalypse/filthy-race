@@ -41,32 +41,60 @@ socket.on('get:user', (data) => {
 });
 
 socket.on('get:game', (data) => {
+  const { game } = data;
   const p = document.createElement('p');
-  p.innerText = `${data.game}`;
+  p.innerText = game;
   chatArea.append(p);
-  socket.emit('game:start', () => {});
+
+  window.addEventListener('keydown', (e) => {
+    if (
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowUp'
+    ) {
+      socket.emit('hero:move', { key: e.key });
+    }
+  });
 });
 
 socket.on('game:table', (data) => {
-  const { table } = data;
-  console.log(table);
-});
-
-window.addEventListener('keydown', (e) => {
-  if (
-    e.key === 'ArrowLeft' ||
-    e.key === 'ArrowRight' ||
-    e.key === 'ArrowDown' ||
-    e.key === 'ArrowUp'
-  ) {
-    socket.emit('hero:move', { key: e.key });
-  }
+  const { table, colors, users } = data;
+  table.forEach((col, y) =>
+    col.forEach((row, x) => {
+      const el = document.querySelector(`[data-coord='${x}:${y}']`);
+      if (el !== null) {
+        el.style = `background-color: ${colors[table[x][y]]}`;
+      }
+      el.innerHTML = '';
+    }),
+  );
+  users.forEach((user, i) => {
+    const [X, Y] = user;
+    const el = document.querySelector(`[data-coord='${X}:${Y}']`);
+    el.innerHTML = `<img src="/images/image_${i}.png">`;
+  });
 });
 
 socket.on('hero:move', (data) => {
-  const { position } = data;
-  const tableEl = document.querySelector(
-    `[data-coord='${position[0]}:${position[1]}']`,
+  const { colors, table, users, cNames } = data;
+  const count = [0, 0, 0, 0];
+  const [X, Y] = data.position;
+  table.forEach((col, y) =>
+    col.forEach((row, x) => {
+      table[x][y] !== null ? (count[table[x][y]] += 1) : '';
+      const el = document.querySelector(`[data-coord='${x}:${y}']`);
+      el.style = `background-color: ${colors[table[x][y]]}`;
+      el.innerHTML = '';
+    }),
   );
-  tableEl.style = 'background-color: red';
+  count.forEach((score, i) => {
+    const span = document.getElementById(`score_${i}`);
+    span.innerHTML = score;
+  });
+  users.forEach((user, i) => {
+    const [X, Y] = user;
+    const el = document.querySelector(`[data-coord='${X}:${Y}']`);
+    el.innerHTML = `<img src="/images/image_${i}.png">`;
+  });
 });

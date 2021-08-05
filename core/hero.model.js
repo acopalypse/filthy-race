@@ -1,34 +1,47 @@
 class Hero {
   constructor(user) {
     this.uid = user.uid;
-    // this.name = user.name;
+    this.num = user.num;
     this.position = user.position;
     this.room = user.room;
     this.color = user.color;
   }
 
-  heroMove(key) {
+  heroMove(key, table) {
+    const [X, Y] = this.position;
     switch (key) {
       case 'ArrowUp':
-        if (this.position[0] > 0) {
+        if (
+          X > 0 &&
+          (table[X - 1][Y] === null || table[X - 1][Y] === this.num)
+        ) {
           this.position[0] -= 1;
           // console.log('move up');
         }
         break;
       case 'ArrowDown':
-        if (this.position[0] < 11) {
+        if (
+          X < 11 &&
+          (table[X + 1][Y] === null || table[X + 1][Y] === this.num)
+        ) {
           this.position[0] += 1;
           // console.log('move down');
         }
         break;
       case 'ArrowLeft':
-        if (this.position[1] > 0) {
+        if (
+          Y > 0 &&
+          (table[X][Y - 1] === null || table[X][Y - 1] === this.num)
+        ) {
           this.position[1] -= 1;
           // console.log('move left');
         }
         break;
       case 'ArrowRight':
-        if (this.position[1] < 11) {
+        if (
+          Y < 11 &&
+          (table[X][Y + 1] === null || table[X][Y + 1] === this.num)
+        ) {
           this.position[1] += 1;
           // console.log('move right');
         }
