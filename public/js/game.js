@@ -40,6 +40,18 @@ socket.on('get:user', (data) => {
   chatArea.append(p);
 });
 
+socket.on('get:game', (data) => {
+  const p = document.createElement('p');
+  p.innerText = `${data.game}`;
+  chatArea.append(p);
+  socket.emit('game:start', () => {});
+});
+
+socket.on('game:table', (data) => {
+  const { table } = data;
+  console.log(table);
+});
+
 window.addEventListener('keydown', (e) => {
   if (
     e.key === 'ArrowLeft' ||

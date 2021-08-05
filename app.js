@@ -34,8 +34,17 @@ const positions = [
 ];
 const Hero = require('./core/hero.model');
 const Game = require('./core/game.model');
+const games = [];
 const users = [];
+
 io.on('connection', (socket) => {
+  socket.hn = users.length;
+  if (users.length === 0) {
+    const game = new Game([]);
+    games.push(game);
+  }
+  socket.gn = games.length - 1;
+  users.push('hero');
   rn = rc === 0 ? socket.id : rn;
   console.log(`New connection: [${socket.id}](${io.engine.clientsCount})`);
   socket.leave(socket.id);
@@ -54,16 +63,27 @@ io.on('connection', (socket) => {
     position: positions[rc],
     color: colors[rc],
   };
+  io.to(rn).emit('get:user', {
+    user: `${heroData.color}--${heroData.uid}`,
+  });
   const hero = new Hero(heroData);
-  // users.push(hero);
-  const game = new Game(hero);
+  games[socket.gn].users.push(hero);
+  if (users.length === 4) {
+    io.to(rn).emit('get:game', {
+      game: 'Game start!',
+    });
+  }
   socket.on('hero:move', (key) => {
-    const position = hero.heroMove(key.key);
-    game.tableCheck(hero);
+    const data = {
+      heroNum: socket.hn,
+      key: key.key,
+    };
+    const position = games[socket.gn].users[socket.hn].heroMove(data.key);
+    games[socket.gn].tableCheck(socket.hn);
     socket.emit('hero:move', { position });
   });
-  io.to(rn).emit('get:user', {
-    user: socket.id,
+  io.to(rn).emit('game:table', {
+    table: games[socket.gn].table,
   });
   io.emit('get:usersCount', { all: io.engine.clientsCount });
   if (rc === 3) {
