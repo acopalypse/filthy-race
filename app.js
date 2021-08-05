@@ -29,6 +29,8 @@ const cNames = ['red', 'green', 'yellow', 'pop'];
 
 const Hero = require('./core/hero.model');
 const Game = require('./core/game.model');
+const getImage = require('./core/api.core');
+
 const games = [];
 const users = [];
 
@@ -124,8 +126,18 @@ io.on('connection', (socket) => {
     rc += 1;
   }
   socket.on('mail:message', (message) => {
-    message.text = `${cNames[socket.hn]}: ${message.text}`;
-    io.to(rn).emit('mail:message', message);
+    switch (message.text) {
+      case '!cat':
+        getImage().then((api) => {
+          const img = `${cNames[socket.hn]}:<br><img src='${api[0].url}' >`;
+          io.to(rn).emit('mail:message:img', img);
+        });
+        break;
+      default:
+        message.text = `${cNames[socket.hn]}: ${message.text}`;
+        io.to(rn).emit('mail:message', message);
+        break;
+    }
   });
 });
 

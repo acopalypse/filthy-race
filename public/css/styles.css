@@ -13,7 +13,8 @@ body {
 }
 #title {
   margin-bottom: 0;
-  text-align: center;
+  font-size: 12px;
+  text-align: right;
 }
 .game-wrapper {
   display: flex;
@@ -21,7 +22,7 @@ body {
 #game {
   width: 480px;
   height: 480px;
-  margin: 25px auto;
+  margin: 25px auto 0;
   border-radius: 10px;
   position: relative;
 }
@@ -56,7 +57,7 @@ body {
 }
 #chat {
   width: 280px;
-  margin: 25px auto;
+  margin: 25px auto 0;
 }
 #chatArea {
   width: 100%;
@@ -77,6 +78,11 @@ body {
   margin: 0px 15px 10px;
   padding: 5px 10px;
 }
+#chatArea img {
+  max-width: 100%;
+  border-radius: 15px;
+  margin: 10px 0;
+}
 #inputArea input {
   width: 220px;
   height: 34px;
@@ -94,6 +100,7 @@ body {
   height: 34px;
   width: 56px;
   cursor: pointer;
+  font-size: 13px;
 }
 #inputArea button:hover {
   background-color: #72bb72;
@@ -115,4 +122,38 @@ body {
   margin: 25px auto 15px;
   padding: 10px;
   border-radius: 10px;
+}
+#score ul li {
+  display: inline-block;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+#score ul li:nth-child(1) {
+  background-color: rgb(233, 30, 99);
+  color: white;
+}
+#score ul li:nth-child(2) {
+  background-color: rgb(76, 175, 80);
+}
+#score ul li:nth-child(3) {
+  background-color: rgb(255, 193, 7);
+}
+#score ul li:nth-child(4) {
+  background-color: rgb(50, 30, 34);
+  color: white;
+}
+#score ul {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+#score p {
+  text-align: center;
+  font-size: 24px;
+  margin: 5px 0;
+}
+.color-wr {
+  text-align: center;
+  font-size: 18px;
 }

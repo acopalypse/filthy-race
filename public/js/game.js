@@ -22,6 +22,12 @@ socket.on('mail:message', (message) => {
   chatArea.append(p);
   chatArea.scrollTop = chatArea.scrollHeight;
 });
+socket.on('mail:message:img', (img) => {
+  const p = document.createElement('p');
+  p.innerHTML = img;
+  chatArea.append(p);
+  chatArea.scrollTop = chatArea.scrollHeight;
+});
 
 Array(12)
   .fill('')
@@ -124,12 +130,12 @@ socket.on('game:end', (data) => {
     const div = document.createElement('div');
     const p = document.createElement('p');
     p.innerHTML = `
-    End!
+    Конец!
     <br>
-    Winner: ${winner}
+    Победитель: ${winner}
     <br>
     <br>
-    <a href='/game'>Restart</a>
+    <a href='/game'>Повторить</a>
     `;
     div.className = 'end';
     div.append(p);
