@@ -30,6 +30,7 @@ const cNames = ['red', 'green', 'yellow', 'pop'];
 const Hero = require('./core/hero.model');
 const Game = require('./core/game.model');
 const getImage = require('./core/api.core');
+const getWeather = require('./core/apiWeather.core');
 
 const games = [];
 const users = [];
@@ -131,6 +132,20 @@ io.on('connection', (socket) => {
         getImage().then((api) => {
           const img = `${cNames[socket.hn]}:<br><img src='${api[0].url}' >`;
           io.to(rn).emit('mail:message:img', img);
+        });
+        break;
+      case '!boss':
+        message.text = `${cNames[socket.hn]}: Ey b0ss I habe cancer!`;
+        io.to(rn).emit('mail:message', message);
+        break;
+      case '!weather':
+        getWeather().then((api) => {
+          const city = api.name;
+          const temp = api.main.temp.toFixed(0);
+          const tFeel = api.main.feels_like.toFixed(0);
+          const weather = api.weather[0].description;
+          message.text = `Погода: ${city} - ${temp}°C (ощущается как ${tFeel}°C) ${weather}`;
+          io.to(rn).emit('mail:message', message);
         });
         break;
       default:

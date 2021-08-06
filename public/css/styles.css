@@ -123,6 +123,9 @@ body {
   padding: 10px;
   border-radius: 10px;
 }
+.intro p {
+  text-align: center;
+}
 #score ul li {
   display: inline-block;
   padding: 15px;
@@ -156,4 +159,9 @@ body {
 .color-wr {
   text-align: center;
   font-size: 18px;
+}
+
+.ps p {
+  color: #2a6f2a;
+  font-size: 14px;
 }
